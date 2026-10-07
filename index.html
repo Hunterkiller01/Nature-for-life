@@ -315,6 +315,85 @@
         </a>
     </nav>
 
+    <script src="https://sdk.minepi.com/pi-sdk.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0fdf4;
+            color: #166534;
+            text-align: center;
+        }
+        header {
+            background-color: #15803d;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .btn-login {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-login:hover {
+            background-color: #15803d;
+        }
+        #user-info {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Nature for Life</h1>
+        <p>Karibu kwenye mtandao wa kuhifadhi na kuchunguza picha za mazingira.</p>
+    </header>
+
+    <main>
+        <div id="auth-section">
+            <button class="btn-login" onclick="loginWithPi()">Ingia na Pi (Sign In with Pi)</button>
+        </div>
+        <div id="user-info"></div>
+    </main>
+
+    <script>
+        // 2. Kuanzisha Pi SDK kwa Sandbox Mode (Testnet)
+        const Pi = window.Pi;
+        Pi.init({ version: "2.0", sandbox: true });
+
+        // 3. Mfumo wa Pi Sign-In
+        function loginWithPi() {
+            const scopes = ['username'];
+
+            function onIncompletePaymentFound(payment) {
+                console.log("Malipo hayajakamilika:", payment);
+            }
+
+            Pi.authenticate(scopes, onIncompletePaymentFound)
+                .then(function(auth) {
+                    console.log("Umeingia kikamilifu:", auth);
+                    document.getElementById("auth-section").style.display = "none";
+                    document.getElementById("user-info").innerText = "Karibu, " + auth.user.username + "! 👋";
+                })
+                .catch(function(error) {
+                    console.error("Imeshindikana kuingia:", error);
+                    alert("Kosa wakati wa kuingia: " + error.message);
+                });
+        }
+    </script>
+    
     <!-- JavaScript kwa ajili ya Preview na Handling -->
     <script>
         const imageInput = document.getElementById('imageInput');
